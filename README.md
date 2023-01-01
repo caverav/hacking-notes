@@ -1,11 +1,30 @@
 # Repositorio donde escribo/anoto recursos relacionados al hacking
 
+<!-- TOC start -->
+- [Web](#web)
+  * [HTTP Request Smuggling](#http-request-smuggling)
+    + [¿Qué es?](#qué-es)
+    + [Tipos de ataques de HTTP Request Smuggling](#tipos-de-ataques-de-http-request-smuggling)
+      - [CL.TE](#clte)
+      - [TE.CL](#tecl)
+      - [TE.TE:](#tete)
+    + [Cómo identificarlas](#cómo-identificarlas)
+      - [Técnicas de tiempo (delay)](#técnicas-de-tiempo-delay)
+        * [CL.TE](#clte-1)
+        * [TE.CL](#tecl-1)
+      - [Confirmando la vulnerabilidad usando respuestas diferenciales](#confirmando-la-vulnerabilidad-usando-respuestas-diferenciales)
+        * [CL.TE](#clte-2)
+        * [TE.CL](#tecl-2)
+<!-- TOC end -->
+<!-- TOC --><a name="web"></a>
 # Web
 
+<!-- TOC --><a name="http-request-smuggling"></a>
 ## HTTP Request Smuggling
 
 ![HTTP Request Smuggling diagram](img/http-request-smuggling.svg)
 
+<!-- TOC --><a name="qué-es"></a>
 ### ¿Qué es?
 
 Una técnica para interferir el modo en el que un sitio web procesa secuencias de consultas HTTP
@@ -52,8 +71,10 @@ Como la especificación HTTP admite dos formas de indicar el largo de los mensaj
 
 Entonces cuando los servidores de frontend y backend procesan de maneras diferentes los headers (específicamente `Transfer-Encoding`) es cuando podría ser vulnerable.
 
+<!-- TOC --><a name="tipos-de-ataques-de-http-request-smuggling"></a>
 ### Tipos de ataques de HTTP Request Smuggling
 
+<!-- TOC --><a name="clte"></a>
 #### CL.TE
 
 Es cuando el frontend utiliza `Content-Length` y el backend `Transfer-Encoding`
@@ -73,6 +94,7 @@ SMUGGLED
 
 El frontend determina que el cuerpo de la consulta es de 13 bytes, es decir, hasta el final de SMUGGLED, esta consulta es enviada al backend, donde se determina que la consulta termina en el 0, por lo tanto se ve SMUGGLED como el inicio de una nueva consulta totalmente aparte.
 
+<!-- TOC --><a name="tecl"></a>
 #### TE.CL
 
 Es cuando el frontend utiliza `Transfer-Encoding` y el backend `Content-Length`.
@@ -94,6 +116,7 @@ SMUGGLED
 
 En este caso el frontend procesa "todo" el cuerpo, pero el backend al procesar `Content-Length` llega hasta antes de SMUGGLED, por lo que desde esa parte en adelante, será procesada en el backend como una nueva consulta.
 
+<!-- TOC --><a name="tete"></a>
 #### TE.TE:
 
 Es cuando el frontend utiliza `Transfer-Encoding` y el backend `Transfer-Encoding`, pero alguno de los servidores se puede inducir a no procesar el header, posiblemente por ofuscación.
@@ -116,10 +139,13 @@ Transfer-Encoding
 : chunked
 ```
 
+<!-- TOC --><a name="cómo-identificarlas"></a>
 ### Cómo identificarlas
 
+<!-- TOC --><a name="técnicas-de-tiempo-delay"></a>
 #### Técnicas de tiempo (delay)
 
+<!-- TOC --><a name="clte-1"></a>
 ##### CL.TE
 
 Si la aplicación es vulnerable a esta variante, entonces probablemente va a causar un delay esta consulta:
@@ -137,6 +163,7 @@ X
 
 Ya que el frontend enviaría la consulta sin incluir la X, mientras que el backend esperaría el próximo chunk.
 
+<!-- TOC --><a name="tecl-1"></a>
 ##### TE.CL
 
 En este caso usaríamos la siguiente consulta:
@@ -154,6 +181,7 @@ X
 
 El frontend mandaría hasta el 0, mientras que el backend esperaría más datos, gracias a `Content-Length`
 
+<!-- TOC --><a name="confirmando-la-vulnerabilidad-usando-respuestas-diferenciales"></a>
 #### Confirmando la vulnerabilidad usando respuestas diferenciales
 
 > Nota: como consulta "normal" se usará de ejemplo la siguiente consulta:
@@ -167,6 +195,7 @@ El frontend mandaría hasta el 0, mientras que el backend esperaría más datos,
 > q=smuggling
 > ```
 
+<!-- TOC --><a name="clte-2"></a>
 ##### CL.TE
 
 ```http
@@ -200,6 +229,7 @@ En el caso de que devuelva el 404 (o lo que se espera dependiendo del ataque) se
 
 > Nota: contrastar que gracias a Foo: x, la consulta es válida, ya que "borra" la parte superior de la siguiente consulta para reemplazarla por el 404.
 
+<!-- TOC --><a name="tecl-2"></a>
 ##### TE.CL
 
 ```http
@@ -230,8 +260,8 @@ Content-Length: 146
 x=
 0
 
-POST /search HTTP/1.1
-Host: vulnerable-website.com
+POST /prueba HTTP/1.1
+Host: prueba.com
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 11
 
