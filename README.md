@@ -12,11 +12,11 @@ Una técnica para interferir el modo en el que un sitio web procesa secuencias d
 
 Típicamente cuando el frontend de una aplicación recibe consultas, intenta enviar muchas consultas juntas al backend, ya que esto es mucho más eficiente, esto es posible gracias a los headers de las consultas, que le indican al servidor dónde termina y dónde inicia una consulta, pero para esto deben interpretarlo de la misma manera el frontend y el backend.
 
-![Diagrama de frontend enviando varias consultas (de distintas fuentes) al backend](/home/camilo/hacking-notes/img/forwarding-http-requests-to-back-end-server.svg)
+![Diagrama de frontend enviando varias consultas (de distintas fuentes) al backend](img/forwarding-http-requests-to-back-end-server.svg)
 
 Este es el caso "normal", ya que no hay confusiones ni consultas extrañas, pero si un atacante desea confundir a un servidor vulnerable, le puede hacer creer que parte de la consulta es otra nueva, como se muestra en el siguiente diagrama.
 
-![Diagrama que muestra un caso de smuggling en el que parte de la consulta del atacante se interpreta como una completamente nueva perteneciente a otro cliente](/home/camilo/hacking-notes/img/smuggling-http-request-to-back-end-server.svg)
+![Diagrama que muestra un caso de smuggling en el que parte de la consulta del atacante se interpreta como una completamente nueva perteneciente a otro cliente](img/smuggling-http-request-to-back-end-server.svg)
 
 Esta vulnerabilidad nace principalmente gracias a 2 headers, que son las dos maneras de indicar dónde termina una consulta: `Content-Length` y `Transfer-Encoding`
 
