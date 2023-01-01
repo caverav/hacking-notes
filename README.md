@@ -5,16 +5,9 @@
   * [HTTP Request Smuggling](#http-request-smuggling)
     + [¿Qué es?](#qué-es)
     + [Tipos de ataques de HTTP Request Smuggling](#tipos-de-ataques-de-http-request-smuggling)
-      - [CL.TE](#clte)
-      - [TE.CL](#tecl)
-      - [TE.TE:](#tete)
     + [Cómo identificarlas](#cómo-identificarlas)
       - [Técnicas de tiempo (delay)](#técnicas-de-tiempo-delay)
-        * [CL.TE](#clte-1)
-        * [TE.CL](#tecl-1)
       - [Confirmando la vulnerabilidad usando respuestas diferenciales](#confirmando-la-vulnerabilidad-usando-respuestas-diferenciales)
-        * [CL.TE](#clte-2)
-        * [TE.CL](#tecl-2)
 <!-- TOC end -->
 <!-- TOC --><a name="web"></a>
 # Web
